@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <title>knp v4.20/jumanpp v2-rc3</title>
+  <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+    integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <style>
+    .result {
+      white-space: pre;
+      font-family: monospace, serif;
+    }
+  </style>
+</head>
+
+<body>
+  <form id="form">
+    <label for="text">解析対象</label>
+    <input id="text" type="text" name="text" style="width: 80%;" value="望遠鏡で泳ぐ少女を見た。"></input>
+    <input type="submit"/>
+  </form>
+  <hr />
+  <div id="result" />
+  <script>
+    $(
+      $("#form").on("submit", (event) => {
+        const param = $(event.currentTarget).serialize()
+        $.post("/knp", param)
+          .done((res) => {
+            const text = `${res.tree}\n${res.all}`
+            const output = $('<div class="result"/>').text(text)
+            $("#result").prepend(output);
+          })
+        event.preventDefault();
+        event.stopPropagation();
+      })
+    );
+  </script>
+</body>
+</html>
